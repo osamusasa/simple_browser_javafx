@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 
 <!-- fx:controllerで関連付けるコントローラクラスを指定 -->
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.osamusasa.browser.Controller">
@@ -13,16 +15,20 @@
         <BorderPane styleClass="topView">
             <left>
                 <FlowPane prefWidth="100">
-                    <Button onAction="#onBack" text="戻る"></Button>
-                    <Button onAction="#onNext" text="進む"></Button>
+                    <Button onAction="#onBack" text="戻る"/>
+                    <Button onAction="#onNext" text="進む"/>
                 </FlowPane>
             </left>
             <center>
-                <TextField fx:id="addressBar" text="" onKeyPressed="#onAddressBarEvent" ></TextField>
+                <TextField fx:id="addressBar" onKeyPressed="#onAddressBarEvent" />
             </center>
             <right>
-                <FlowPane prefWidth="100">
-                    <Button onAction="#onNewTab" text="+"></Button>
+                <FlowPane prefWidth="120">
+                    <Button onAction="#onNewTab" text="+"/>
+                    <Button onAction="#onBookmarkViewer" text="☆"/>
+                    <MenuButton text="☰">
+                        <items><MenuItem onAction="#onBookmarking" text="bookmark"/></items>
+                    </MenuButton>
                 </FlowPane>
             </right>
         </BorderPane>

@@ -3,17 +3,25 @@ package xyz.osamusasa.browser;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+import lombok.Setter;
+import xyz.osamusasa.browser.util.Resource;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class Controller {
+    @Setter
+    private Stage stage;
+
     @FXML private TextField addressBar;
     @FXML private TabPane tabPane;
 
@@ -72,6 +80,46 @@ public class Controller {
      */
     public void onNewTab(ActionEvent e) {
         loadNewTab("https://www.google.co.jp/");
+    }
+
+    /**
+     * ブックマーク表示ボタン
+     *
+     * @param e ActionEvent
+     */
+    @FXML
+    public void onBookmarkViewer(ActionEvent e) {
+        try {
+            //fxmlとcssを読み込んで画面表示
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/bookmarkPane.fxml"));
+            Parent root = loader.load();
+            BookmarkPaneController controller = loader.getController();
+
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initOwner(this.stage);
+            stage.showAndWait();
+        } catch(Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    /**
+     * ブックマーク追加ボタン
+     *
+     * @param e ActionEvent
+     */
+    @FXML
+    public void onBookmarking(ActionEvent e) {
+        String bookmarkingURL = addressBar.getText();
+        ArrayList<String> bookmarks = Resource.bookmarks.getResource();
+        bookmarks.add(bookmarkingURL);
+        boolean success = Resource.save(getClass().getResource(Resource.PATH_BOOKMARK), bookmarks);
+        System.out.println("save bookmark: " + success);
+        if (!success) {
+            System.err.println("bookmarking error");
+        }
     }
 
     /**
