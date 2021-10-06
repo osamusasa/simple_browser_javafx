@@ -1,12 +1,14 @@
 package xyz.osamusasa.browser.util;
 
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import lombok.Getter;
 
 import java.io.*;
 import java.net.URL;
 import java.util.*;
 
-public class Resource<T extends Serializable> extends ResourceBundle {
+public class Resource<T> extends ResourceBundle {
 
     public static final String PATH_BOOKMARK = "/setting/bookmark.ser";
     public static final String KEY_BOOKMARK = "bookmark.ser";
@@ -16,11 +18,12 @@ public class Resource<T extends Serializable> extends ResourceBundle {
 
     private final String key;
 
-    public final static Resource<ArrayList<String>> bookmarks;
+    public final static Resource<SimpleListProperty<String>> bookmarks;
 
     static {
         bookmarks = Resource.<ArrayList<String>>loadResource(Resource.class.getResource(PATH_BOOKMARK))
-                .orElse(new Resource<>(new ArrayList<>(), KEY_BOOKMARK));
+                .map(list -> new Resource<>(new SimpleListProperty<>(FXCollections.observableList(list.getResource())),list.key))
+                .orElse(new Resource<>(new SimpleListProperty<>(), KEY_BOOKMARK));
     }
 
     /**

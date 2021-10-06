@@ -8,6 +8,12 @@
             fx:controller="xyz.osamusasa.browser.BookmarkPaneController"
             prefHeight="400.0" prefWidth="600.0">
 
+    <top>
+        <FlowPane>
+            <Button text="+"/>
+            <Button onAction="#onDeleteButton" text="-"/>
+        </FlowPane>
+    </top>
     <center>
         <ListView fx:id="listView"/>
     </center>

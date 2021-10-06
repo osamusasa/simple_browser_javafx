@@ -1,15 +1,19 @@
 package xyz.osamusasa.browser;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
+import lombok.Setter;
 import xyz.osamusasa.browser.util.Resource;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class BookmarkPaneController implements Initializable {
+    @Setter
+    private Controller parentController;
+
     @FXML private ListView<String> listView;
 
     /**
@@ -19,7 +23,25 @@ public class BookmarkPaneController implements Initializable {
      */
     public void initialize(URL location, ResourceBundle resources) {
         // ブックマークを設定
-        ArrayList<String> bookmarks = Resource.bookmarks.getResource();
-        listView.getItems().addAll(bookmarks);
+        listView.itemsProperty().bindBidirectional(Resource.bookmarks.getResource());
+        // クリックされたら対象のURLを新規タブで表示
+        listView.setOnMouseClicked(event -> {
+            ListView<String> view = (ListView<String>) event.getSource();
+            if (event.getClickCount()==2) {
+                System.err.println("Debug: " + view.contains(event.getX(), event.getY()));
+                // 選択した状態で他の場所をダブルクリックすると選択されていたアイテムが表示される
+                parentController.loadNewTab(view.getSelectionModel().getSelectedItem());
+                view.getSelectionModel().clearSelection();
+            }
+        });
+    }
+
+    /**
+     * 削除ボタン
+     *
+     * @param e ActionEvent
+     */
+    public void onDeleteButton(ActionEvent e) {
+        listView.getItems().remove(listView.getSelectionModel().getSelectedIndex());
     }
 }
