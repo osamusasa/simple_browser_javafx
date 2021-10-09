@@ -3,9 +3,6 @@ package xyz.osamusasa.browser;
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
@@ -14,6 +11,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import lombok.Getter;
 import lombok.Setter;
 import xyz.osamusasa.browser.records.WebHistoryEntry;
 import xyz.osamusasa.browser.util.Resource;
@@ -25,6 +23,7 @@ import java.util.Optional;
 
 public class Controller {
     @Setter
+    @Getter
     private Stage stage;
 
     @FXML private TextField addressBar;
@@ -94,24 +93,7 @@ public class Controller {
      */
     @FXML
     public void onBookmarkViewer(ActionEvent e) {
-        try {
-            //fxmlとcssを読み込んで画面表示
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/bookmarkPane.fxml"));
-            Parent root = loader.load();
-            BookmarkPaneController controller = loader.getController();
-            controller.setParentController(this);
-
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-
-            // 親コンポーネントを閉じたら、コンポーネントを閉じる
-            this.stage.setOnHiding(event -> stage.close());
-
-            stage.showAndWait();
-        } catch(Exception exception) {
-            exception.printStackTrace();
-        }
+        AbstractSubPaneController.showSubPaneController(this, "/fxml/bookmarkPane.fxml");
     }
 
     /**
@@ -153,24 +135,7 @@ public class Controller {
      */
     @FXML
     public void onShowingHistory(ActionEvent e) {
-        try {
-            //fxmlとcssを読み込んで画面表示
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/historyPane.fxml"));
-            Parent root = loader.load();
-            HistoryPaneController controller = loader.getController();
-            controller.setParentController(this);
-
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-
-            // 親コンポーネントを閉じたら、コンポーネントを閉じる
-            this.stage.setOnHiding(event -> stage.close());
-
-            stage.showAndWait();
-        } catch(Exception exception) {
-            exception.printStackTrace();
-        }
+        AbstractSubPaneController.showSubPaneController(this, "/fxml/historyPane.fxml");
     }
 
     /**

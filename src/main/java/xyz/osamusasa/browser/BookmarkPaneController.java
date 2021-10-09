@@ -26,7 +26,7 @@ public class BookmarkPaneController extends AbstractSubPaneController implements
             if (event.getClickCount()==2) {
                 System.err.println("Debug: " + view.contains(event.getX(), event.getY()));
                 // 選択した状態で他の場所をダブルクリックすると選択されていたアイテムが表示される
-                parentController.loadNewTab(view.getSelectionModel().getSelectedItem());
+                loadNewTab(view.getSelectionModel().getSelectedItem());
                 view.getSelectionModel().clearSelection();
             }
         });
