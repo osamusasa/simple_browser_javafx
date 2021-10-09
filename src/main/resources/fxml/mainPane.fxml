@@ -27,7 +27,8 @@
                     <Button onAction="#onNewTab" text="+"/>
                     <Button onAction="#onBookmarkViewer" text="☆"/>
                     <MenuButton text="☰">
-                        <items><MenuItem onAction="#onBookmarking" text="bookmark"/></items>
+                        <items><MenuItem onAction="#onBookmarking" text="add bookmark"/></items>
+                        <items><MenuItem onAction="#onShowingHistory" text="show history"/></items>
                     </MenuButton>
                 </FlowPane>
             </right>

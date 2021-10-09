@@ -2,21 +2,23 @@ package xyz.osamusasa.browser;
 
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebHistory;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import lombok.Setter;
+import xyz.osamusasa.browser.records.WebHistoryEntry;
 import xyz.osamusasa.browser.util.Resource;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -130,6 +132,48 @@ public class Controller {
     }
 
     /**
+     * アクセス履歴に追加する。
+     *
+     * @param entry アクセス履歴
+     */
+    private void recodeHistory(WebHistoryEntry entry) {
+        List<WebHistoryEntry> history = Resource.history.getResource();System.err.println(history);
+        history.add(entry);
+        boolean success = Resource.save(getClass().getResource(Resource.PATH_HISTORY), new ArrayList<>(history));
+        System.out.println("save history: " + success);
+        if (!success) {
+            System.err.println("recoding history error: " + entry);
+        }
+    }
+
+    /**
+     * 履歴を表示
+     *
+     * @param e ActionEvent
+     */
+    @FXML
+    public void onShowingHistory(ActionEvent e) {
+        try {
+            //fxmlとcssを読み込んで画面表示
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/historyPane.fxml"));
+            Parent root = loader.load();
+            HistoryPaneController controller = loader.getController();
+            controller.setParentController(this);
+
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+
+            // 親コンポーネントを閉じたら、コンポーネントを閉じる
+            this.stage.setOnHiding(event -> stage.close());
+
+            stage.showAndWait();
+        } catch(Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    /**
      * URLロード
      *
      * @param search URL
@@ -171,6 +215,8 @@ public class Controller {
                     if (newState == State.SUCCEEDED) {
                         addressBar.setText(engine.getLocation());
                         tab.setText(engine.getTitle().substring(0, Math.min(engine.getTitle().length(), 15)));
+
+                        recodeHistory(new WebHistoryEntry(engine.getLocation(), engine.getTitle(), LocalDateTime.now()));
                     }
                 }
         );

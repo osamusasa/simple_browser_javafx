@@ -3,15 +3,21 @@ package xyz.osamusasa.browser.util;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import lombok.Getter;
+import xyz.osamusasa.browser.records.WebHistoryEntry;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class Resource<T> extends ResourceBundle {
 
     public static final String PATH_BOOKMARK = "/setting/bookmark.ser";
     public static final String KEY_BOOKMARK = "bookmark.ser";
+    public static final String PATH_HISTORY = "/setting/history.ser";
+    public static final String KEY_HISTORY = "history.ser";
 
     @Getter
     private final T resource;
@@ -19,11 +25,29 @@ public class Resource<T> extends ResourceBundle {
     private final String key;
 
     public final static Resource<SimpleListProperty<String>> bookmarks;
+    public final static Resource<SimpleListProperty<WebHistoryEntry>> history;
 
     static {
         bookmarks = Resource.<ArrayList<String>>loadResource(Resource.class.getResource(PATH_BOOKMARK))
                 .map(list -> new Resource<>(new SimpleListProperty<>(FXCollections.observableList(list.getResource())),list.key))
-                .orElse(new Resource<>(new SimpleListProperty<>(), KEY_BOOKMARK));
+                .orElseGet(()->{
+                    try {
+                        save(Paths.get(Resource.class.getResource("/").getPath(), PATH_BOOKMARK).toUri().toURL(), new ArrayList<WebHistoryEntry>());
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    return new Resource<>(new SimpleListProperty<>(FXCollections.observableArrayList()), KEY_BOOKMARK);
+                });
+        history = Resource.<ArrayList<WebHistoryEntry>>loadResource(Resource.class.getResource(PATH_HISTORY))
+                .map(list -> new Resource<>(new SimpleListProperty<>(FXCollections.observableList(list.getResource())),list.key))
+                .orElseGet(()->{
+                    try {
+                        save(Paths.get(Resource.class.getResource("/").getPath(), PATH_HISTORY).toUri().toURL(), new ArrayList<WebHistoryEntry>());
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    return new Resource<>(new SimpleListProperty<>(FXCollections.observableArrayList()), KEY_HISTORY);
+                });
     }
 
     /**
@@ -51,6 +75,7 @@ public class Resource<T> extends ResourceBundle {
             ObjectInputStream objectInputStream = new ObjectInputStream(path.openStream());
             return Optional.of((T)objectInputStream.readObject());
         } catch (IOException | ClassNotFoundException | ClassCastException e) {
+            System.err.println("serialize error at path: " + path);
             e.printStackTrace();
             return Optional.empty();
         }
@@ -69,6 +94,16 @@ public class Resource<T> extends ResourceBundle {
             return false;
         }
         try {
+            File f = new File(path.getPath());
+            if (!f.exists()) {
+                Files.createDirectories(f.getParentFile().toPath());
+                boolean isCreated = f.createNewFile();
+                if (isCreated) {
+                    System.out.println("create new File: " + f.toPath());
+                } else {
+                    System.err.println("file create error: " + f.toPath());
+                }
+            }
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(path.getPath()));
             objectOutputStream.writeObject(data);
             return true;
