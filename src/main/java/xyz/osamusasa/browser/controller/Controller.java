@@ -1,4 +1,4 @@
-package xyz.osamusasa.browser;
+package xyz.osamusasa.browser.controller;
 
 import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;

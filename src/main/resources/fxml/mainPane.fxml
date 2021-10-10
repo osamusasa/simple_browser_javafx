@@ -9,7 +9,7 @@
 <?import javafx.scene.control.MenuItem?>
 
 <!-- fx:controllerで関連付けるコントローラクラスを指定 -->
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.osamusasa.browser.Controller">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.osamusasa.browser.controller.Controller">
     <top>
         <!-- 画面ヘッダーの表示 -->
         <BorderPane styleClass="topView">
