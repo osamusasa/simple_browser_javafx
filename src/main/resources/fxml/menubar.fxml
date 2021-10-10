@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<MenuBar xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml"
+         fx:controller="xyz.osamusasa.browser.controller.MenubarController"
+         useSystemMenuBar="true">
+    <Menu mnemonicParsing="false" text="File">
+        <MenuItem mnemonicParsing="false" onAction="#onNew" text="New Window"/>
+        <MenuItem mnemonicParsing="false" onAction="#onNewTab" text="New Tab"/>
+        <MenuItem mnemonicParsing="false" onAction="#onOpenFile" text="Open File"/>
+        <SeparatorMenuItem/>
+        <MenuItem mnemonicParsing="false" onAction="#onCloseWindow" text="Close Window"/>
+        <MenuItem mnemonicParsing="false" onAction="#onCloseTab" text="Close Tab"/>
+        <MenuItem mnemonicParsing="false" onAction="#onSave" text="Save"/>
+        <SeparatorMenuItem/>
+        <MenuItem mnemonicParsing="false" onAction="#onPrint" text="Print"/>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Edit">
+        <MenuItem mnemonicParsing="false" onAction="#onUndo" text="Undo"/>
+        <MenuItem mnemonicParsing="false" onAction="#onRedo" text="Redo"/>
+        <SeparatorMenuItem/>
+        <MenuItem mnemonicParsing="false" onAction="#onCut" text="Cut"/>
+        <MenuItem mnemonicParsing="false" onAction="#onCopy" text="Copy"/>
+        <MenuItem mnemonicParsing="false" onAction="#onPaste" text="Paste"/>
+        <MenuItem mnemonicParsing="false" onAction="#onSelectAll" text="Select All"/>
+    </Menu>
+    <Menu mnemonicParsing="false" text="View">
+        <MenuItem mnemonicParsing="false" onAction="#onDummy" text="dummy"/>
+    </Menu>
+    <Menu mnemonicParsing="false" text="History">
+        <MenuItem mnemonicParsing="false" onAction="#onShowAllHistory" text="Show All History"/>
+        <SeparatorMenuItem/>
+        <MenuItem mnemonicParsing="false" onAction="#onDeleteHistory" text="Delete History"/>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Bookmark">
+        <MenuItem mnemonicParsing="false" onAction="#onShowBookmark" text="Show Bookmark"/>
+        <SeparatorMenuItem/>
+        <MenuItem mnemonicParsing="false" onAction="#onAddBookmark" text="Add Bookmark"/>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Develop">
+        <MenuItem mnemonicParsing="false" onAction="#onDummy" text="dummy"/>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Window" fx:id="windowMenu">
+        <MenuItem mnemonicParsing="false" onAction="#onDummy" text="dummy"/>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Help">
+        <MenuItem mnemonicParsing="false" onAction="#onDummy" text="dummy"/>
+    </Menu>
+</MenuBar>
